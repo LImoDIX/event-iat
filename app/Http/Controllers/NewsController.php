@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\News;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class NewsController
@@ -62,6 +63,7 @@ class NewsController extends Controller
             'description' => $request->description,
             'photo_path' => $photoPath,
             'is_active' => $request->is_active ?? true,
+            'user_id' => Auth::id(),
         ]);
 
         return redirect()->route('admin.news.index')
@@ -173,6 +175,9 @@ class NewsController extends Controller
         if ($news->photo_path) {
             $news->photo_url = asset('storage/' . $news->photo_path);
         }
+        
+        // Загружаем информацию об авторе
+        $news->load('user');
         
         return inertia('News/Show', [
             'news' => $news,

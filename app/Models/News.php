@@ -17,6 +17,14 @@ use Illuminate\Database\Eloquent\Model;
 class News extends Model
 {
     use HasFactory;
+    
+    /**
+     * Получить пользователя, который создал новость.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     protected $fillable = [
         'title',

@@ -27,9 +27,9 @@ const getProfilePhotoUrl = (photoPath) => {
 const getProfileRoute = () => {
     const user = page.props.auth.user;
     if (user.role === 'admin') {
-        return route('profile.edit');
+        return route('profile.admin-organizer');
     } else if (user.role === 'organizer') {
-        return route('profile.organizer');
+        return route('profile.admin-organizer');
     } else {
         return route('profile.visitor');
     }

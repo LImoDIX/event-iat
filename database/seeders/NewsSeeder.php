@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\News;
+use App\Models\User;
 
 class NewsSeeder extends Seeder
 {
@@ -12,12 +13,17 @@ class NewsSeeder extends Seeder
      */
     public function run(): void
     {
+        // Получаем ID администратора
+        $admin = User::where('role', User::ROLE_ADMIN)->first();
+        $adminId = $admin ? $admin->id : null;
+        
         // Создаем 5 новостей с реалистичными данными
         News::create([
             'title' => 'Начало нового учебного года',
             'description' => 'Дорогие студенты и преподаватели! Рады сообщить, что новый учебный год начинается 1 сентября. Расписание занятий доступно в личном кабинете каждого студента. Желаем всем успешного учебного года!',
             'photo_path' => null,
             'is_active' => true,
+            'user_id' => $adminId,
         ]);
 
         News::create([
@@ -25,6 +31,7 @@ class NewsSeeder extends Seeder
             'description' => 'В этом году наш университет получил значительное финансирование для модернизации кампуса. В ближайшие месяцы будут проведены ремонтные работы в учебных корпусах и общежитиях. Следите за новостями о графике работ.',
             'photo_path' => null,
             'is_active' => true,
+            'user_id' => $adminId,
         ]);
 
         News::create([
@@ -32,6 +39,7 @@ class NewsSeeder extends Seeder
             'description' => 'Наш университет примет участие в международной научной конференции, которая состоится в декабре этого года. Приглашаем студентов и преподавателей подать заявки на участие. Подробности на сайте университета.',
             'photo_path' => null,
             'is_active' => true,
+            'user_id' => $adminId,
         ]);
 
         News::create([
@@ -39,6 +47,7 @@ class NewsSeeder extends Seeder
             'description' => 'С нового семестра открываются новые курсы по современным языкам программирования и технологиям разработки. Регистрация уже началась. Количество мест ограничено, поэтому рекомендуем регистрироваться заранее.',
             'photo_path' => null,
             'is_active' => true,
+            'user_id' => $adminId,
         ]);
 
         News::create([
@@ -46,6 +55,7 @@ class NewsSeeder extends Seeder
             'description' => 'В рамках студенческой весны пройдут спортивные соревнования по различным дисциплинам. Приглашаем всех студентов принять участие или поддержать своих товарищей. Расписание соревнований доступно на стенде спортивного клуба.',
             'photo_path' => null,
             'is_active' => true,
+            'user_id' => $adminId,
         ]);
     }
 }

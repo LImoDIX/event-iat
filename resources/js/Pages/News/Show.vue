@@ -1,10 +1,14 @@
-иь<script setup>
+<script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link } from '@inertiajs/vue3';
+import { usePage } from '@inertiajs/vue3';
 
 const props = defineProps({
     news: Object,
 });
+
+const page = usePage();
+const user = page.props.auth.user;
 
 // Функция для получения корректного URL изображения
 const getImageUrl = (imagePath) => {
@@ -20,6 +24,17 @@ const getImageUrl = (imagePath) => {
     
     return `/storage/${imagePath}`;
 };
+
+// Функция для получения маршрута дашборда в зависимости от роли пользователя
+const getDashboardRoute = () => {
+    if (user.role === 'admin') {
+        return route('dashboard.admin');
+    } else if (user.role === 'organizer') {
+        return route('dashboard.organizer');
+    } else {
+        return route('dashboard.visitor');
+    }
+};
 </script>
 
 <template>
@@ -34,14 +49,14 @@ const getImageUrl = (imagePath) => {
                         <h1 class="text-4xl font-bold text-gray-900 mb-2">{{ news.title }}</h1>
                         <p class="text-gray-600">Подробная информация о новости</p>
                     </div>
-                    <Link 
-                        :href="route('dashboard.visitor')" 
+                    <Link
+                        :href="getDashboardRoute()"
                         class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium transition-all duration-200 shadow-sm hover:shadow-md border border-blue-600/20"
                     >
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                         </svg>
-                        Назад к дашборду
+                        Назад к главной
                     </Link>
                 </div>
 
@@ -80,6 +95,12 @@ const getImageUrl = (imagePath) => {
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                                     </svg>
                                     <span>Опубликовано: {{ new Date(news.created_at).toLocaleDateString('ru-RU') }}</span>
+                                </div>
+                                <div v-if="news.user" class="flex items-center gap-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                    </svg>
+                                    <span>Автор: {{ news.user.name }}</span>
                                 </div>
                             </div>
                         </div>
